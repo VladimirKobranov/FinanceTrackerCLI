@@ -5,8 +5,8 @@ from grouped_data import group_by_month, display_grouped_data
 from input_data import input_string
 from local_convertor import local_convertor
 from search_by_month_data import search_by_month
-from text_prompts import mainMessage, helpMessage, creditsMessage, availableCurrencies, currency_list
 from terminal_name import set_terminal_title, get_terminal_title
+from text_prompts import mainMessage, helpMessage, creditsMessage, availableCurrencies, currency_list
 
 new_title = 'Finance tracker'
 original_title = get_terminal_title()
@@ -140,13 +140,10 @@ def main():
                 print(creditsMessage)
             case _:
                 print('Nothing here\n')
-
-    print("Program Terminated!")
-
     with open("FinanceList.json", "w") as outfile:
         json.dump(finances_list, outfile, indent=4)
-
     set_terminal_title(original_title)
+    print("Program Terminated!\n")
 
 
 if __name__ == "__main__":

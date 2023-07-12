@@ -33,11 +33,12 @@ creditsMessage = """
     https://github.com/VladimirKobranov
 ------------------------------------------
         Release Date: 2023-07-10
-          Version Number: 1.1
+          Version Number: 1.1.5
              Release Notes:
 --added conversion at Forex Exchange Market
 --added local currency convertor
 --added input checks
+--added program name title
 ------------------------------------------
 """
 availableCurrencies = """

@@ -6,6 +6,11 @@ from input_data import input_string
 from local_convertor import local_convertor
 from search_by_month_data import search_by_month
 from text_prompts import mainMessage, helpMessage, creditsMessage, availableCurrencies, currency_list
+from terminal_name import set_terminal_title, get_terminal_title
+
+new_title = 'Finance tracker'
+original_title = get_terminal_title()
+set_terminal_title(new_title)
 
 
 def main():
@@ -140,6 +145,8 @@ def main():
 
     with open("FinanceList.json", "w") as outfile:
         json.dump(finances_list, outfile, indent=4)
+
+    set_terminal_title(original_title)
 
 
 if __name__ == "__main__":

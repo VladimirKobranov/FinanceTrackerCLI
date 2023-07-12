@@ -1,13 +1,14 @@
 from datetime import datetime
 
 
-def search_by_month(financesList):
-    keyword = input("Enter month (leave empty for current month): \n")
+def search_by_month(finances_list):
+    keyword = input("Enter month (leave empty for current month): ")
+    print()
     if not keyword:
         keyword = datetime.now().strftime("%B")
 
     matched_strings = []
-    for string in financesList:
+    for string in finances_list:
         date_str = string.split('---')[0]
         date = datetime.strptime(date_str, "%Y-%m-%d")
         month = date.strftime("%B")
@@ -19,6 +20,6 @@ def search_by_month(financesList):
     if len(matched_strings) == 0:
         print('No matching strings found.')
     else:
-        print(f"Matched strings for month '{keyword}':")
+        print(f"Matched strings for month '{keyword}':\n")
         for string in matched_strings:
             print(string)

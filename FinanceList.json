@@ -1,8 +1,9 @@
 [
-    "2023-07-10---Income---99.0---USD---donate",
-    "2023-07-10---Expense---25.0---USD---rider subs",
-    "2023-03-04---Expense---200.0---USD--- some minus",
-    "2023-04-05---Expense---55.0---USD---something",
-    "2023-07-10---Income---99.0---USD---test ",
-    "2023-06-01---Income---300.0---USD---salary"
+    "2023-07-12---Income---1000.0---USD---new value",
+    "2023-01-02---Income---99.0---USD---new year eve",
+    "2023-07-12---Expense---55.0---USD---some minus",
+    "2023-07-12---Income---123.0---USD---1qa",
+    "2023-07-12---Income---11---USD---new values",
+    "2023-07-12---Expense---99---USD---minus",
+    "2023-07-12---Income---11.11---USD---none"
 ]

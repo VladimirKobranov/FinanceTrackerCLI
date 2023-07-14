@@ -1,13 +1,13 @@
 from datetime import datetime
 from decimal import Decimal, ROUND_DOWN
-
 from forex_python.converter import CurrencyRates
 
 c = CurrencyRates()
 
 
 def group_by_month(finances_list, currency_choice):
-    print('Loading...\n')
+    if currency_choice != 'USD':
+        print('Loading...\n')
     grouped_data = {}
     for item in finances_list:
         parts = item.split('---')
@@ -17,21 +17,17 @@ def group_by_month(finances_list, currency_choice):
         year = date_parts[0]
         month_year = f"{month} {year}"
         description = ''
-
-        value = c.convert('USD', currency_choice, Decimal((float(value))))
+        value = Decimal(value)
+        if expense_income == 'Expense':
+            value = -value
+        value = c.convert('USD', currency_choice, value)
         value = value.quantize(Decimal('0.00'), rounding=ROUND_DOWN)
-        currency = currency_choice
+        if rest:
+            description = '---'.join(rest[1:])
         if month_year not in grouped_data:
             grouped_data[month_year] = []
-        if expense_income == 'Expense':
-            value = float(value) * -1
-        if rest:
-            # currency = rest[0]
-            description = '---'.join(rest[1:])
-            grouped_data[month_year].append(
-                f"{date_parts[2]}---{expense_income}---{value}---{currency}---{description}")
-        else:
-            grouped_data[month_year].append(f"{date_parts[2]}---{expense_income}---{value}---{description}")
+        grouped_data[month_year].append(
+            f"{date_parts[2]}---{expense_income}---{value}---{currency_choice}---{description}")
     return grouped_data
 
 
@@ -44,14 +40,12 @@ def display_grouped_data(grouped_data):
     for month in sorted_months:
         values = grouped_data[month]
         print(f"{month}:")
+
         for value in values:
             parts = value.split('---')
-            if len(parts) == 4:
-                date, expense_income, amount, description = parts
-            else:
-                date, expense_income, amount, currency, description = parts
-            print(f"{date}---{expense_income}---{amount}---{currency}---{description}")
-            expense_income = expense_income
+            date, expense_income, amount, *rest = parts
+            currency = rest[0] if rest else currency
+            print(f"{date}---{expense_income}---{amount}---{currency}---{rest[1] if len(rest) > 1 else ''}")
             amount = Decimal(amount)
             if expense_income == 'Expense':
                 overall_expense += amount
@@ -64,3 +58,23 @@ def display_grouped_data(grouped_data):
     print('Expenses:', abs(overall_expense), currency)
     print("Income:", abs(overall_income), currency)
     print("Total:", overall_sum.quantize(Decimal('0.00'), rounding=ROUND_DOWN), currency)
+
+
+def grouped_final(finances_list, currency_list):
+    if not finances_list:
+        print('List is empty!')
+        return
+    print('Displaying grouped data\nList of all available currencies can be found in the main menu')
+    currency_choice = input('Enter currency (Or leave for USD): ').upper()
+    print()
+    if not currency_choice:
+        currency_choice = 'USD'
+    while currency_choice not in currency_list:
+        print('Entered currency is not in the currency list\nYou can view all available currencies in the main menu\n')
+        currency_choice = input('Enter currency again: ').upper()
+        print()
+    if currency_choice == 'RUB':
+        print('Your currency is not available at this moment.\nWill be used USD\n')
+        currency_choice = 'USD'
+    grouped_data = group_by_month(finances_list, currency_choice)
+    display_grouped_data(grouped_data)

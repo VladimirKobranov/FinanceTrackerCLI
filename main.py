@@ -1,10 +1,11 @@
 import json
 import os
 
-from grouped_data import group_by_month, display_grouped_data
+from grouped_data import grouped_final
 from input_data import input_string
 from local_convertor import local_convertor
 from search_by_month_data import search_by_month
+from show_all_delete_string import delete_string
 from terminal_name import set_terminal_title, get_terminal_title
 from text_prompts import mainMessage, helpMessage, creditsMessage, availableCurrencies, currency_list
 
@@ -18,8 +19,7 @@ def main():
         with open("FinanceList.json", "r") as infile:
             finances_list = json.load(infile)
     except FileNotFoundError:
-        print("The 'finances.json' file is not found.")
-        print("Starting a new finance list!")
+        print("The 'finances.json' file is not found\nStarting a new finance list!")
         finances_list = []
 
     def clear():
@@ -27,119 +27,54 @@ def main():
 
     choice = ''
     currency = 'USD'
-    while choice not in ['8', 'exit', 'quit']:
+    while choice not in ['8', 'exit', 'quit', 'q', 'e']:
         print(mainMessage)
         choice = input('Enter index: ')
         match choice:
-            case '0' | 'help':
+            case '0' | 'help' | 'h':
                 clear()
                 print(helpMessage)
-            case '1' | 'add':
+            case '1' | 'add' | 'a':
                 clear()
                 print('Adding new string\n')
                 input_string(finances_list, currency)
-            case '2' | 'find':
+            case '2' | 'find' | 'f':
                 clear()
                 if len(finances_list) == 0:
                     print('List is empty!')
                 else:
                     print('Looking for existing strings\n')
                     search_by_month(finances_list)
-            case '3' | 'all':
+            case '3' | 'all' | 'aa':
                 clear()
                 if len(finances_list) == 0:
                     print('List is empty!')
                 else:
-                    print('Displaying all strings:\n')
-                    print('------------------------------------------\n')
-                    sorted_list = sorted(finances_list, key=lambda x: x.split('---')[0])
-                    for item in sorted_list:
-                        print(item)
-            case '4' | 'grouped':
+                    delete_string(finances_list)
+            case '4' | 'grouped' | 'g':
                 clear()
-                if len(finances_list) == 0:
-                    print('List is empty!')
-                else:
-                    print('Displaying grouped data\n')
-                    print('List of all available currencies can be found in main menu.')
-                    currency_choice = input('Enter currency (Or leave for USD): ').upper()
-                    print()
-                    if currency_choice == '':
-                        currency_choice = 'USD'
-                    while currency_choice not in currency_list:
-                        print('Entered currency is not in currency list')
-                        print('You can watch all available currencies in main menu')
-                        currency_choice = input('Enter currency again: ').upper()
-                        print()
-                    else:
-                        if currency_choice == 'RUB':
-                            print('You currency is not available at this moment.')
-                            print('USD will be used\n')
-                            currency_choice = 'USD'
-                        else:
-                            currency_choice = currency_choice
-                    grouped_data = group_by_month(finances_list, currency_choice)
-                    display_grouped_data(grouped_data)
-            case '5' | 'currency' | 'cur':
+                grouped_final(finances_list, currency_list)
+            case '5' | 'currency' | 'cur'| 'cr':
                 clear()
                 print(availableCurrencies)
-            case '6' | 'convertor' | 'conv':
+            case '6' | 'convertor' | 'conv' | 'c':
                 clear()
                 print('---------Local currency convertor---------\n')
-                first_input = input('First currency: ').upper()
-                while first_input not in currency_list:
-                    print()
-                    print('Entered currency is not in currency list')
-                    print('You can watch all available currencies in main menu')
-                    first_input = input('Enter currency again: ').upper()
-                    print()
-                else:
-                    if first_input == 'RUB':
-                        print()
-                        print('You currency is not available at this moment.')
-                        print('USD will be used\n')
-                        first_input = 'USD'
-                    else:
-                        first_input = first_input
-                second_input = input('Second currency: ').upper()
-                while second_input not in currency_list:
-                    print()
-                    print('Entered currency is not in currency list')
-                    print('You can watch all available currencies in main menu')
-                    second_input = input('Enter currency again: ').upper()
-                    print()
-                else:
-                    if second_input == 'RUB':
-                        print()
-                        print('You currency is not available at this moment.')
-                        print('USD will be used\n')
-                        second_input = 'USD'
-                    else:
-                        second_input = second_input
-
-                while True:
-                    amount = input('Amount: ')
-                    try:
-                        float(amount)
-                        break
-                    except ValueError:
-                        print('Enter only numbers\n')
-                print()
-                local_convertor(first_input, second_input, amount)
-            case '7' | 'clear':
+                local_convertor(currency_list)
+            case '7' | 'clear' | 'cl':
                 clear()
                 clear_question = input('Do you want to clean all data? y/n: ')
                 if clear_question == 'y':
                     finances_list.clear()
                     print('Cleared!')
-            case '8' | 'exit' | 'quit':
+            case '8' | 'exit' | 'quit' | 'q' | 'e':
                 clear()
                 print('Quiting\n')
-            case '9' | 'info' | 'credits':
+            case '9' | 'info' | 'credits' | 'i':
                 clear()
                 print(creditsMessage)
             case _:
-                print('Nothing here\n')
+                print('Wrong command\n')
     with open("FinanceList.json", "w") as outfile:
         json.dump(finances_list, outfile, indent=4)
     set_terminal_title(original_title)

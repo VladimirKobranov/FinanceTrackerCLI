@@ -18,8 +18,9 @@ def search_by_month(finances_list):
             matched_strings.append(string)
 
     if len(matched_strings) == 0:
-        print('No matching strings found.')
+        print('No matching strings found')
     else:
         print(f"Matched strings for month '{keyword}':\n")
-        for string in matched_strings:
-            print(string)
+        for i, string in enumerate(matched_strings, start=1):
+            print(f"{i:2}. {string}")
+    print()

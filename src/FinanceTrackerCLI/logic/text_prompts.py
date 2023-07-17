@@ -33,7 +33,7 @@ creditsMessage = """
     https://github.com/VladimirKobranov
 ------------------------------------------
         Release Date: 2023-07-10
-          Version Number: 1.2.5
+          Version Number: 1.4.0
              Release Notes:
 --added conversion at Forex Exchange Market
 --added local currency convertor
@@ -41,6 +41,7 @@ creditsMessage = """
 --added program name title
 --added delete string functionality 
 --overhaul, fixes
+--packed to pip
 ------------------------------------------
 """
 availableCurrencies = """

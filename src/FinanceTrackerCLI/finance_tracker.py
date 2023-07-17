@@ -1,22 +1,27 @@
 import json
 import os
+import os.path
 
-from grouped_data import grouped_final
-from input_data import input_string
-from local_convertor import local_convertor
-from search_by_month_data import search_by_month
-from show_all_delete_string import delete_string
-from terminal_name import set_terminal_title, get_terminal_title
-from text_prompts import mainMessage, helpMessage, creditsMessage, availableCurrencies, currency_list
+from logic.grouped_data import grouped_final
+from logic.input_data import input_string
+from logic.local_convertor import local_convertor
+from logic.search_by_month_data import search_by_month
+from logic.show_all_delete_string import delete_string
+from logic.terminal_name import set_terminal_title, get_terminal_title
+from logic.text_prompts import mainMessage, helpMessage, creditsMessage, \
+    availableCurrencies, currency_list
 
 new_title = 'Finance tracker'
 original_title = get_terminal_title()
 set_terminal_title(new_title)
 
+current_dir = os.path.dirname(os.path.abspath(__file__))
+file_path = os.path.join(current_dir, "FinanceList.json")
+
 
 def main():
     try:
-        with open("FinanceList.json", "r") as infile:
+        with open(file_path, "r") as infile:
             finances_list = json.load(infile)
     except FileNotFoundError:
         print("The 'finances.json' file is not found\nStarting a new finance list!")
@@ -54,7 +59,7 @@ def main():
             case '4' | 'grouped' | 'g':
                 clear()
                 grouped_final(finances_list, currency_list)
-            case '5' | 'currency' | 'cur'| 'cr':
+            case '5' | 'currency' | 'cur' | 'cr':
                 clear()
                 print(availableCurrencies)
             case '6' | 'convertor' | 'conv' | 'c':
@@ -75,7 +80,7 @@ def main():
                 print(creditsMessage)
             case _:
                 print('Wrong command\n')
-    with open("FinanceList.json", "w") as outfile:
+    with open(file_path, "w") as outfile:
         json.dump(finances_list, outfile, indent=4)
     set_terminal_title(original_title)
     print("Program Terminated!\n")
